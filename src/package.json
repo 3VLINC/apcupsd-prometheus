@@ -1,0 +1,14 @@
+{
+    "name": "apcupsd-prometheus",
+    "version": "0.1.0",
+    "license": "MIT",
+    "scripts": {
+      "start": "node ./main.js"
+    },
+    "private": true,
+    "devDependencies": {
+      "apcaccess": "^1.1.2",
+      "wait-on": "^7.0.1"
+    }
+  }
+  

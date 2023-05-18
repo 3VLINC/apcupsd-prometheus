@@ -1,12 +1,10 @@
 version: '3.4'
 services:
-  pwrstatPrometheus:
-    image: 'threevl/pwrstat-prometheus:0.1.0'
+  apcupsdPrometheus:
+    image: 'threevl/apcupsd-prometheus:0.1.0'
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        pwrstatVersion: ./versions/PPL_64bit_v1.4.1.deb
     privileged: true
     volumes:
       - /dev/bus/usb:/dev/bus/usb
