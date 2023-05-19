@@ -7,8 +7,8 @@
     },
     "private": true,
     "devDependencies": {
-      "apcaccess": "^1.1.2",
-      "wait-on": "^7.0.1"
+      "wait-on": "^7.0.1",
+      "node-cron": "^2.0.3"
     }
   }
   
