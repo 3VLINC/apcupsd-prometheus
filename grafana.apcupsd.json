@@ -22,7 +22,7 @@
       ]
     },
     "description": "APCUSD panel visualization as provided by https://github.com/3VLINC/apcupsd-prometheus",
-    "editable": false,
+    "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": 9,
@@ -465,10 +465,10 @@
         },
         "id": 6,
         "libraryPanel": {
-          "name": "Average Load (5m)",
+          "name": "Load",
           "uid": "UUSerVL4z"
         },
-        "title": "Average Load (5m)"
+        "title": "Load"
       },
       {
         "datasource": {
@@ -615,13 +615,13 @@
       "list": []
     },
     "time": {
-      "from": "now-15m",
+      "from": "now-6h",
       "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "APCUPSD",
     "uid": "imJJUlUVk",
-    "version": 27,
+    "version": 28,
     "weekStart": ""
   }
