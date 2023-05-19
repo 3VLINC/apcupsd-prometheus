@@ -13,7 +13,6 @@ services:
     privileged: true
     environment:
         APCUPSD_OUTPUT_FILEPATH: # Rename the output prometheus data file (defaults to apcupsd.prom)
-        APCUPSD_REFRESH_INTERVAL: # Change the refresh interval in ms (defaults to 5000ms)
         APCUPSD_DEBUG: # View debugging information (defaults to undefined) 
     volumes:
         - /dev/bus/usb:/dev/bus/usb # Use this to mount the USB bus of your linux server inside the container so that it can interact with your pwrstat UPS
