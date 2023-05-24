@@ -9,6 +9,7 @@ An easy installation method is to use a docker-compose.yaml file to run the imag
 1. Run `sudo dmesg | grep usb`.
 1. Identify the mount point for your UPS. Often it is named `hiddev*` e.g. `hiddev0`,`hiddev1`...
 1. Verify the mount point for your distribution. Often this maps to `/dev/usb/hiddev*`.
+1. Add the following to your `docker-compose.yml`
 
 ```
 version: "3.7"
