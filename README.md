@@ -5,26 +5,88 @@ This image allows you to export [APCUPSD](http://www.apcupsd.org/) stats to Prom
 # Installation via Docker-Compose
 An easy installation method is to use a docker-compose.yaml file to run the image.
 
+1. Plug the USB cable of your UPS in.
+1. Run `sudo dmesg | grep usb`.
+1. Identify the mount point for your UPS. Often it is named `hiddev*` e.g. `hiddev0`,`hiddev1`...
+1. Verify the mount point for your distribution. Often this maps to `/dev/usb/hiddev*`.
+
 ```
 version: "3.7"
 services:
-  apcupsdPrometheus:
+  apcupsd:
     image: threevl/apcupsd-prometheus
-    privileged: true
-    environment:
-        APCUPSD_OUTPUT_FILEPATH: # Rename the output prometheus data file (defaults to apcupsd.prom)
-        APCUPSD_DEBUG: # View debugging information (defaults to undefined) 
+    devices:
+      - /dev/usb/hiddev0 # Should match the mount point you identified above
     volumes:
-        - /dev/bus/usb:/dev/bus/usb # Use this to mount the USB bus of your linux server inside the container so that it can interact with your pwrstat UPS
-        - /var/lib/node_exporter/textfile_collector:/root/textfile_collector # Use this to mount the volume where the prometheus data file should be exported to
-        - /apcupsd.conf:/etc/apcupsd.conf # OPTIONAL: Set a custom apcupsd config file to override defaults see apcupsd.conf
+        - /var/lib/node_exporter/textfile_collector:/root/textfile_collector # The location where prometheus data should be exported
 ```
+
+# Environment variables
+## APCUPSD_OUTPUT_FILEPATH
+Renames the output prometheus data file.
+
+Default: "apcupsd.prom"
+
+## APCUPSD_DEBUG
+View debugging information.
+
+Default: undefined
+
+## APCUPSD_POLL_CRON
+Change the update frequency of the exporter. Supports node-cron formats (e.g. */30 * * * * *). Note that APCUPSD by default polls every 60 seconds. If you want more frequent polling you will need to customize apcupsd.conf.
+
+Default: "* * * * *"
+
+## APCUPSD_TIMEOUT
+Maximum time the script will wait for the socket to be available.
+
+Default: 30000
+
+- /apcupsd.conf:/etc/apcupsd.conf # OPTIONAL: Set a custom apcupsd config file to override defaults (see apcupsd.conf)
+If you want to increase the frequency to < 1min you will need to customize the apcupsd.conf file see below. (e.g. "*/30 * * * * *")
+
 # Grafana dashboard
 
 ![Grafana UPS display](dashboard.png)
 
 You can load the above dashboard into grafana by importing the [Dashboard JSON file](./grafana.apcupsd.json).
 
+
+
+# Debug Device Connection
+In some cases you may have difficulty connecting your UPS to the docker container. Please keep the following in mind.
+- The docker container should be started with the USB connection already made
+- Changing ports or plugging peripherals in a different order may change the device mount point
+
+If you are having trouble with the above you can temporarily try connecting all usb devices to the container to see if this resolves your issue.
+
+Note this method grants elevates the priviliges of the container on the host. While this may be useful for debugging it is not a recommended configuration. [See Docker runtime privilege and linux capabilities.](https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities)
+
+```
+version: "3.7"
+services:
+  apcupsd:
+    image: threevl/apcupsd-prometheus
+    privileged: true
+    volumes:
+        - /var/lib/node_exporter/textfile_collector:/root/textfile_collector
+        - /dev/bus/usb:/dev/bus/usb # Use this to mount the USB bus of your linux server inside the container so that it can interact with your pwrstat UPS
+```
+
+# Customize the APCUPS configuration
+You can customize the APC UPS configuration by mounting your custom apcupsd.conf file over the default one in the container.
+
+```
+version: "3.7"
+services:
+  apcupsd:
+    image: threevl/apcupsd-prometheus
+    devices:
+      - /dev/usb/hiddev0
+    volumes:
+        - /var/lib/node_exporter/textfile_collector:/root/textfile_collector
+        - <PATH_TO_CUSTOM_APCUPSD>:/etc/apcupsd/apcupsd.conf
+```
 # Available metrics
 The following metrics are made available by this exporter:
 
@@ -57,7 +119,6 @@ model
 serial_number
 apc_model
 ```
-
 
 The following labels are made available on the apcupsd_info metric.
 ```
