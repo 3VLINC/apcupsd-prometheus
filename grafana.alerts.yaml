@@ -1,0 +1,108 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Low Battery
+      folder: UPS
+      interval: 10s
+      rules:
+        - uid: vbjM5h74z
+          title: Low Battery
+          condition: B
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PBFA97CFB590B2093
+              model:
+                editorMode: code
+                expr: apcupsd_time_left
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                range: true
+                refId: A
+            - refId: B
+              datasourceUid: "-100"
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 30
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - A
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: "-100"
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: B
+                type: classic_conditions
+          noDataState: NoData
+          execErrState: Alerting
+          for: 15s
+          annotations:
+            summary: Low Battery, UPS will shut off in under 30 minutes
+          isPaused: false
+    - orgId: 1
+      name: Power Failure
+      folder: UPS
+      interval: 10s
+      rules:
+        - uid: dhDg5hn4k
+          title: Power Failure
+          condition: B
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PBFA97CFB590B2093
+              model:
+                editorMode: code
+                expr: (vector(1) and on() (apcupsd_info{status="ONLINE"})) or (vector(0) and on() (apcupsd_info{status="ONBATT"}))
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                range: true
+                refId: A
+            - refId: B
+              datasourceUid: "-100"
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - A
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: "-100"
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: B
+                type: classic_conditions
+          noDataState: NoData
+          execErrState: Alerting
+          for: 15s
+          annotations:
+            summary: Power Failure
+          isPaused: false

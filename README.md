@@ -46,11 +46,13 @@ Default: 30000
 - /apcupsd.conf:/etc/apcupsd.conf # OPTIONAL: Set a custom apcupsd config file to override defaults (see apcupsd.conf)
 If you want to increase the frequency to < 1min you will need to customize the apcupsd.conf file see below. (e.g. "*/30 * * * * *")
 
-# Grafana dashboard
+# Grafana Setup
 
 ![Grafana UPS display](dashboard.png)
 
-You can load the above dashboard into grafana by importing the [Dashboard JSON file](./grafana.apcupsd.json).
+You can load the above dashboard into grafana by importing the [Dashboard JSON file](./grafana.dashboard.json).
+
+You can load some example alerts into grafana by importing the [Alerts YAML file](./grafana.alerts.yaml).
 
 
 
