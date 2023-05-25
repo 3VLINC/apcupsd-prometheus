@@ -5,9 +5,9 @@ This image allows you to export [APCUPSD](http://www.apcupsd.org/) stats to Prom
 # Installation via Docker-Compose
 An easy installation method is to use a docker-compose.yaml file to run the image.
 
-1. Plug the USB cable of your UPS in.
-1. Run `sudo dmesg | grep usb`.
-1. Identify the mount point for your UPS. Often it is named `hiddev*` e.g. `hiddev0`,`hiddev1`...
+1. Unplug the USB cable of your UPS and plug it back in.
+1. When your server detects the device an entry will show up when you run `sudo dmesg | grep usb`.
+1. Identify the mount point for your UPS. Often it is named `hiddev*` e.g. `hiddev0`,`hiddev1`... but may vary depending on how many peripherals you have connected.
 1. Verify the mount point for your distribution. Often this maps to `/dev/usb/hiddev*`.
 1. Add the following to your `docker-compose.yml`
 
