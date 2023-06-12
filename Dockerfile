@@ -1,17 +1,14 @@
-FROM --platform=amd64 node:18-bullseye-slim 
+FROM keymetrics/pm2:18-alpine
 ENV APCUPSD_OUTPUT_FILEPATH=apcupsd.prom
+ENV APCUPSD_HOST=
+ENV APCUPSD_PORT=
 ENV APCUPSD_DEBUG=
 ENV APCUPSD_POLL_CRON=
 ENV APCUPSD_TIMEOUT=
-RUN npm install pm2@5.3.0 -g
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-    apcupsd \
-    && rm -rf /var/lib/apt/lists/*
-COPY ./config/apcupsd.conf /etc/apcupsd/apcupsd.conf
-COPY ./config/apcupsd /etc/default/apcupsd
-COPY ./src /root/
-WORKDIR /root
+COPY src src/
+COPY package.json .
+COPY package-lock.json .
+COPY pm2.json .
 RUN npm ci
 VOLUME /root/textfile_collector
-CMD ["/root/entrypoint.sh"]
+CMD ["pm2-runtime", "start", "pm2.json"]

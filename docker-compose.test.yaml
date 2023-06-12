@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+  apcupsdPrometheus:
+    image: 'threevl/apcupsd-prometheus:0.2.0'
+    volumes:
+      - './src:/src/'
+    environment:
+      APCUPSD_HOST: '192.168.1.223'
+      APCUPSD_PORT: '3551'
+      APCUPSD_DEBUG: '1'

@@ -6,9 +6,12 @@
       "start": "node ./main.js"
     },
     "private": true,
-    "devDependencies": {
+    "dependencies": {
       "wait-on": "^7.0.1",
-      "node-cron": "^2.0.3"
+      "node-cron": "^2.0.3",
+      "apcaccess": "^1.0.0"
+    },
+    "devDependencies": {
     }
   }
   

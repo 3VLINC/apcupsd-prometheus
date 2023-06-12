@@ -1,10 +1,7 @@
 version: '3.4'
 services:
   apcupsdPrometheus:
-    image: 'threevl/apcupsd-prometheus:0.1.0'
+    image: 'threevl/apcupsd-prometheus:0.2.0'
     build:
       context: .
       dockerfile: Dockerfile
-    privileged: true
-    volumes:
-      - /dev/bus/usb:/dev/bus/usb
